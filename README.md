@@ -60,26 +60,6 @@ These are the files with the custom funtions and system calls, each one contains
 * Your code should use the PEP 8 style (version 1.7 or more)
 
 
-## Quick Start
-1. Install python
-```
-> sudo apt-get install python3
-```
-2. Clone repo
-```
-> git clone https://github.com/JDorangetree/AirBnB_clone_v2.git
-```
-3. Change directory to simple_shell
-```
-> cd AirBnB_clone_v2/
-```
-4. Execute ./console.py
-```
-> ./console.py
-
-(hbnb)
-```
-
 ## Usage
 
 ### Interactive Mode JSON file engine storage:
