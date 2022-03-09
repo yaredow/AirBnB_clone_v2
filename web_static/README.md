@@ -1,2 +1,23 @@
-This part of the AriBnB clone is the web static part where we will create
-HTML and CSS styling
+# 0x01. AirBnB clone - Web static
+
+## Description
+
+This project's goal is to create a static webpage and to understand the basics of HTML and CSS.
+
+## Table of contents
+
+**1. Index files**
+
+All the index.html files in this folder are a level of the web page, from 0 to 10.
+
+**2. Styles folder**
+
+All the .css stylesheets are situated in the [styles](./styles/) directory.
+
+**3. Images**
+
+All the icons and logos used for this project are in the [images](./images/) directory.
+
+## Author 
+
+Biniyam Getachew

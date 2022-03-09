@@ -1,81 +1,53 @@
 #!/usr/bin/python3
-"""test for user"""
+"""Unittest module for the User Class."""
+
 import unittest
-import os
+from datetime import datetime
+import time
 from models.user import User
+import re
+import json
+from models.engine.file_storage import FileStorage
+import os
+from models import storage
 from models.base_model import BaseModel
-import pep8
 
 
 class TestUser(unittest.TestCase):
-    """this will test the User class"""
 
-    @classmethod
-    def setUpClass(cls):
-        """set up for test"""
-        cls.user = User()
-        cls.user.first_name = "Kevin"
-        cls.user.last_name = "Yook"
-        cls.user.email = "yook00627@gmamil.com"
-        cls.user.password = "secret"
+    """Test Cases for the User class."""
 
-    @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.user
+    def setUp(self):
+        """Sets up test methods."""
+        pass
 
     def tearDown(self):
-        """teardown"""
-        try:
-            os.remove("file.json")
-        except Exception:
-            pass
+        """Tears down test methods."""
+        self.resetStorage()
+        pass
 
-    def test_pep8_User(self):
-        """Tests pep8 style"""
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/user.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+    def resetStorage(self):
+        """Resets FileStorage data."""
+        FileStorage._FileStorage__objects = {}
+        if os.path.isfile(FileStorage._FileStorage__file_path):
+            os.remove(FileStorage._FileStorage__file_path)
 
-    def test_checking_for_docstring_User(self):
-        """checking for docstrings"""
-        self.assertIsNotNone(User.__doc__)
+    def test_8_instantiation(self):
+        """Tests instantiation of User class."""
 
-    def test_attributes_User(self):
-        """chekcing if User have attributes"""
-        self.assertTrue('email' in self.user.__dict__)
-        self.assertTrue('id' in self.user.__dict__)
-        self.assertTrue('created_at' in self.user.__dict__)
-        self.assertTrue('updated_at' in self.user.__dict__)
-        self.assertTrue('password' in self.user.__dict__)
-        self.assertTrue('first_name' in self.user.__dict__)
-        self.assertTrue('last_name' in self.user.__dict__)
+        b = User()
+        self.assertEqual(str(type(b)), "<class 'models.user.User'>")
+        self.assertIsInstance(b, User)
+        self.assertTrue(issubclass(type(b), BaseModel))
 
-    def test_is_subclass_User(self):
-        """test if User is subclass of Basemodel"""
-        self.assertTrue(issubclass(self.user.__class__, BaseModel), True)
+    def test_8_attributes(self):
+        """Tests the attributes of User class."""
+        attributes = storage.attributes()["User"]
+        o = User()
+        for k, v in attributes.items():
+            self.assertTrue(hasattr(o, k))
+            self.assertEqual(type(getattr(o, k, None)), v)
 
-    def test_attribute_types_User(self):
-        """test attribute type for User"""
-        self.assertEqual(type(self.user.email), str)
-        self.assertEqual(type(self.user.password), str)
-        self.assertEqual(type(self.user.first_name), str)
-        self.assertEqual(type(self.user.first_name), str)
-
-    def test_save_User(self):
-        """test if the save works"""
-        self.user.save()
-        self.assertNotEqual(self.user.created_at, self.user.updated_at)
-
-    def test_to_dict_User(self):
-        """test if dictionary works"""
-        self.assertEqual('to_dict' in dir(self.user), True)
-
-    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "Test_DB")
-    def test_save(self):
-        """Test save"""
-        self.user.save()
-        self.assertFalse(self.user.created_at == self.user.updated_at)
 
 if __name__ == "__main__":
     unittest.main()
