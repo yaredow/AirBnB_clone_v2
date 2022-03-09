@@ -11,8 +11,6 @@
 * [Authors](#authors)
 
 ## Description
-This is collaborative project made by Luz Adriana Ariza and Campo Elias Pinillos, students of Software Engineering at Holberton School. This repository contains the files for Holberton's **AirBnB clone project**. A command interpreter to manipulate data without a visual interface, like in a Shell (perfect for development and debugging).
-
 **The Console**
 
 Will help us to:
@@ -102,71 +100,6 @@ Ex:
 `all` or `all <class name>`
 Ex:
 `all` or `all State`
-
-#### Quit
-`quit` or `EOF`
-
-```
-(hbnb) quit
->
-```
-
-#### Help
-`help` or `help <command>`
-Ex:
-`help` or `help quit`
-
-```
-(hbnb) help
-
-Documented commands (type help <topic>):
-========================================
-EOF  all  create  destroy  help  quit  show  update
-```
-
-Additionally, the console supports `<class name>.<command>(<parameters>)` syntax.
-Ex:
-`City.show(my_city_id)`
-
-
-
-### Non-Interactive Mode MySQL engine storage:
-
-Password of hbnb_dev is hbnb_dev_pwd:
-
-```
-user@ubuntu:~/AirBnB_v2$ echo "SHOW DATABASES;" | mysql -uhbnb_dev -p | grep hbnb_dev_db
-Enter password:
-hbnb_dev_db
-```
-
-```
-user@ubuntu:~/AirBnB_v2$ echo "SHOW GRANTS FOR 'hbnb_dev'@'localhost';" | mysql -uroot -p
-Enter password:
-Grants for hbnb_dev@localhost
-GRANT USAGE ON *.* TO 'hbnb_dev'@'localhost'
-GRANT SELECT ON `performance_schema`.* TO 'hbnb_dev'@'localhost'
-GRANT ALL PRIVILEGES ON `hbnb_dev_db`.* TO 'hbnb_dev'@'localhost'
-```
-
-To create a class and the previuos command execute as follow:
-```
-user@ubuntu:~/AirBnB_v2$ echo 'create State name="California"' | HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db ./console.py
-(hbnb) 95a5abab-aa65-4861-9bc6-1da4a36069aa
-```
-
-#### SQLAlchemy ORM
-
-Storage engine SQLAlchemy works with the follow relations:
-
-
-![DB](https://github.com/JDorangetree/AirBnB_clone_v2/blob/master/hbnbDB.png)
-
-
-## Bugs
-No known bugs. Please contact any of the authors if a bug appears.
-
-
 ## Authors
 * **Yohannes Leul** - [yohannesleul24](https://github.com/yohannesleul24)
 
