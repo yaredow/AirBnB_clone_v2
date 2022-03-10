@@ -1,28 +1,27 @@
 #!/usr/bin/python3
-"""Script that starts a Flask web application"""
+"""  a script that starts a Flask web application: """
 
 from flask import Flask, render_template
 from models import storage
+from models import State, Amenity, Place
 app = Flask(__name__)
 
 
-@app.route("/hbnb", strict_slashes=False)
-def hbnb():
-    """Display States"""
-    states = storage.all('State')
-    amenities = storage.all('Amenity')
-    places = storage.all('Place')
-    return render_template('100-hbnb.html',
-                           states=states,
-                           amenities=amenities,
-                           places=places)
-
-
 @app.teardown_appcontext
-def teardown_db(self):
-    """Remove the current SQLAlchemy Session"""
+def closedb(argument):
+    """ to close a database session"""
     storage.close()
 
 
+@app.route('/hbnb', strict_slashes=False)
+def hbnb_filters():
+    """ /hbnb route """
+    state = storage.all(State)
+    amenities = storage.all(Amenity)
+    place = storage.all(Place)
+    return render_template('100-hbnb.html', **locals())
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000', debug=True)
+    storage.reload()
+    app.run("0.0.0.0", 5000)

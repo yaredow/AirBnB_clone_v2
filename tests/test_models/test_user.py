@@ -1,52 +1,51 @@
 #!/usr/bin/python3
-"""Unittest module for the User Class."""
-
+""" a module for user tests"""
 import unittest
-from datetime import datetime
-import time
+import pep8
 from models.user import User
-import re
-import json
-from models.engine.file_storage import FileStorage
 import os
-from models import storage
-from models.base_model import BaseModel
 
 
 class TestUser(unittest.TestCase):
+    """ a class for user tests"""
 
-    """Test Cases for the User class."""
+    @classmethod
+    def setUpClass(cls):
+        """ Example Data """
+        cls.user = User()
+        cls.user.first_name = "Madame"
+        cls.user.last_name = "Tabitha"
+        cls.user.email = "gildedlily@gmail.com"
+        cls.user.password = "gildedlily123"
 
-    def setUp(self):
-        """Sets up test methods."""
-        pass
+    @classmethod
+    def teardown(cls):
+        """ Tear down the class """
+        del cls.user
 
     def tearDown(self):
-        """Tears down test methods."""
-        self.resetStorage()
-        pass
+        """ Tear down the file (file storage) """
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def resetStorage(self):
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.isfile(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    def test_pep8_user(self):
+        """tests for pep8 """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(["models/user.py"])
+        self.assertEqual(p.total_errors, 0, 'fix Pep8')
 
-    def test_8_instantiation(self):
-        """Tests instantiation of User class."""
+    def test_docs_user(self):
+        """ check for docstrings """
+        self.assertIsNotNone(User.__doc__)
 
-        b = User()
-        self.assertEqual(str(type(b)), "<class 'models.user.User'>")
-        self.assertIsInstance(b, User)
-        self.assertTrue(issubclass(type(b), BaseModel))
-
-    def test_8_attributes(self):
-        """Tests the attributes of User class."""
-        attributes = storage.attributes()["User"]
-        o = User()
-        for k, v in attributes.items():
-            self.assertTrue(hasattr(o, k))
-            self.assertEqual(type(getattr(o, k, None)), v)
+    def test_attribute_types_User(self):
+        """test attribute type for User"""
+        self.assertEqual(type(self.user.email), str)
+        self.assertEqual(type(self.user.password), str)
+        self.assertEqual(type(self.user.first_name), str)
+        self.assertEqual(type(self.user.first_name), str)
 
 
 if __name__ == "__main__":

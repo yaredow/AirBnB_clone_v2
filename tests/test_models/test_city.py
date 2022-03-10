@@ -1,53 +1,60 @@
 #!/usr/bin/python3
-"""Unittest module for the City Class."""
-
+""" module for state reviews"""
 import unittest
-from datetime import datetime
-import time
+import pep8
 from models.city import City
-import re
-import json
-from models.engine.file_storage import FileStorage
-import os
-from models import storage
 from models.base_model import BaseModel
-
+import os
 
 class TestCity(unittest.TestCase):
+    """ a class for testing City"""
 
-    """Test Cases for the City class."""
+    @classmethod
+    def setUpClass(cls):
+        """ Example Data """
+        cls.city = City()
+        cls.city.name = "San Francisco"
+        cls.city.state_id = "san-francisco"
 
-    def setUp(self):
-        """Sets up test methods."""
-        pass
+    def teardown(cls):
+        """ tear down Class """
+        del cls.city
 
     def tearDown(self):
-        """Tears down test methods."""
-        self.resetStorage()
-        pass
+        try:
+            os.remove('file.json')
+        except FileNotFoundError:
+            pass
 
-    def resetStorage(self):
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.isfile(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    def test_City_pep8(self):
+        """check for pep8 """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(["models/city.py"])
+        self.assertEqual(p.total_errors, 0, 'fix Pep8')
 
-    def test_8_instantiation(self):
-        """Tests instantiation of City class."""
+    def test_City_docs(self):
+        """ check for docstring """
+        self.assertIsNotNone(City.__doc__)
 
-        b = City()
-        self.assertEqual(str(type(b)), "<class 'models.city.City'>")
-        self.assertIsInstance(b, City)
-        self.assertTrue(issubclass(type(b), BaseModel))
+    def test_City_attribute_types(self):
+        """ test City attribute types """
+        self.assertEqual(type(self.city.name), str)
+        self.assertEqual(type(self.city.state_id), str)
 
-    def test_8_attributes(self):
-        """Tests the attributes of City class."""
-        attributes = storage.attributes()["City"]
-        o = City()
-        for k, v in attributes.items():
-            self.assertTrue(hasattr(o, k))
-            self.assertEqual(type(getattr(o, k, None)), v)
+    def test_City_is_subclass(self):
+        """ test if City is subclass of BaseModel """
+        self.assertTrue(issubclass(self.city.__class__, BaseModel), True)
 
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "City won't save\
+                     because it needs to be tied to a state :\\")
+    def test_City_save(self):
+        """ test save() command """
+        self.city.save()
+        self.assertNotEqual(self.city.created_at, self.city.updated_at)
+
+    def test_City_sa_instance_state(self):
+        """ test is _sa_instance_state has been removed """
+        self.assertNotIn('_sa_instance_state', self.city.to_dict())
 
 if __name__ == "__main__":
     unittest.main()

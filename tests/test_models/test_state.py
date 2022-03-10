@@ -1,53 +1,56 @@
 #!/usr/bin/python3
-"""Unittest module for the State Class."""
-
+""" module for state reviews"""
 import unittest
-from datetime import datetime
-import time
+import pep8
 from models.state import State
-import re
-import json
-from models.engine.file_storage import FileStorage
-import os
-from models import storage
 from models.base_model import BaseModel
-
+import os
 
 class TestState(unittest.TestCase):
+    """ a class for testing State"""
 
-    """Test Cases for the State class."""
+    @classmethod
+    def setUpClass(cls):
+        """ Example Data """
+        cls.state = State()
+        cls.state.name = "Covid-landia"
 
-    def setUp(self):
-        """Sets up test methods."""
-        pass
+    def teardown(cls):
+        """ tear down Class """
+        del cls.state
 
     def tearDown(self):
-        """Tears down test methods."""
-        self.resetStorage()
-        pass
+        try:
+            os.remove('file.json')
+        except FileNotFoundError:
+            pass
 
-    def resetStorage(self):
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.isfile(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    def test_pep8_state(self):
+        """check for pep8 """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(["models/state.py"])
+        self.assertEqual(p.total_errors, 0, 'fix Pep8')
 
-    def test_8_instantiation(self):
-        """Tests instantiation of State class."""
+    def test_docs_state(self):
+        """ check for docstring """
+        self.assertIsNotNone(State.__doc__)
 
-        b = State()
-        self.assertEqual(str(type(b)), "<class 'models.state.State'>")
-        self.assertIsInstance(b, State)
-        self.assertTrue(issubclass(type(b), BaseModel))
+    def test_State_attribute_types(self):
+        """ test State attribute types """
+        self.assertEqual(type(self.state.name), str)
 
-    def test_8_attributes(self):
-        """Tests the attributes of State class."""
-        attributes = storage.attributes()["State"]
-        o = State()
-        for k, v in attributes.items():
-            self.assertTrue(hasattr(o, k))
-            self.assertEqual(type(getattr(o, k, None)), v)
+    def test_State_is_subclass(self):
+        """ test if State is subclass of BaseModel """
+        self.assertTrue(issubclass(self.state.__class__, BaseModel), True)
 
+    def test_State_save(self):
+        """ test save() command """
+        self.state.save()
+        self.assertNotEqual(self.state.created_at, self.state.updated_at)
+
+    def test_State_sa_instance_state(self):
+        """ test is _sa_instance_state has been removed """
+        self.assertNotIn('_sa_instance_state', self.state.to_dict())
 
 if __name__ == "__main__":
     unittest.main()
